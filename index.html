@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>LLM Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        #chat-container {
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        #chat-messages {
+            margin-bottom: 20px;
+        }
+
+        .message {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .user-message {
+            background-color: #e0e0e0;
+        }
+
+        .ai-message {
+            background-color: #f0f0f0;
+        }
+
+        .typing-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background-color: #ccc;
+            border-radius: 50%;
+            margin-left: 5px;
+            animation: typing 1s infinite;
+        }
+
+        @keyframes typing {
+            0% { opacity: 0.2; }
+            50% { opacity: 1; }
+            100% { opacity: 0.2; }
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var eventSource = new EventSource('/events');
+            var chatMessages = document.getElementById('chat-messages');
+            var typingIndicator = document.getElementById('typing-indicator');
+
+            eventSource.onmessage = function(event) {
+                var data = event.data;
+                if (data === "\n") {
+                    var aiMessage = document.createElement('div');
+                    aiMessage.className = 'message ai-message';
+                    chatMessages.appendChild(aiMessage);
+                } else {
+                    var lastMessage = chatMessages.lastElementChild;
+                    if (lastMessage && lastMessage.classList.contains('ai-message')) {
+                        lastMessage.textContent += data;
+                    } else {
+                        var aiMessage = document.createElement('div');
+                        aiMessage.className = 'message ai-message';
+                        aiMessage.textContent = data;
+                        chatMessages.appendChild(aiMessage);
+                    }
+                }
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            };
+
+            eventSource.onopen = function() {
+                typingIndicator.style.display = 'inline-block';
+            };
+
+            eventSource.onclose = function() {
+                typingIndicator.style.display = 'none';
+            };
+        });
+    </script>
+</head>
+<body>
+<h1>LLM Interface</h1>
+<div id="chat-container">
+    <div id="chat-messages">
+    </div>
+    <div>
+        <span class="typing-indicator"></span>
+    </div>
+</div>
+</body>
+</html>
