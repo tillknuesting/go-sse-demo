@@ -21,7 +21,7 @@ func main() {
 			"Feel free to ask me anything, and I'll do my best to provide a helpful response.",
 			"I can help with writing, analysis, coding, math, and more.",
 			"Let me know if you have any specific questions or topics you'd like to discuss.",
-			"I have a vast knowledge base covering various subjects, so feel free to explore any topic you're interested in.",
+		  "I have a vast knowledge base covering various subjects, so feel free to explore any topic you're interested in.",
 			"Whether you need help with problem-solving, creative writing, or research, I'm here to assist you.",
 			"I can provide explanations, generate ideas, and offer insights on a wide range of topics.",
 			"My goal is to provide accurate and informative responses to help you learn and achieve your objectives.",
@@ -59,7 +59,8 @@ func main() {
 				}
 				flusher.Flush()
 			case <-r.Context().Done():
-				return
+				
+        return
 			}
 		}
 	})
